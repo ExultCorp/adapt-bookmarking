@@ -13,10 +13,10 @@ define(function(require) {
 
     function initialize() {
     	Adapt.on('menuView:ready', resetLocationID);
-        Adapt.on('pageView:ready', setupInViewListeners);
+        Adapt.on('pageView:ready', addInViewListeners);
     }
 
-    function setupInViewListeners(pageView) {
+    function addInViewListeners(pageView) {
         var blockViews = pageView.$('.block');
 
         blockViews.each(function (i) {
@@ -29,16 +29,15 @@ define(function(require) {
     }
 
     function setLocationID(id) {
-        Adapt.trigger('bookmarking:locationID', id);
+        ScormWrapper.setLessonLocation(id);
     }
 
     function blockInview(event, visible, visiblePartX, visiblePartY) {
         if (visible) {
             if (visiblePartY === 'top') {
-            	var id = event.currentTarget.className;
-            	var blockID = $.trim(id.substring(id.indexOf(" "), id.lastIndexOf(' ')));
-            	//event.currentTarget.off('blockInview');
-            	setLocationID(blockID);
+            	var className = event.currentTarget.className;
+            	var id = $.trim(className.substring(className.indexOf(" "), className.lastIndexOf(' ')));
+            	setLocationID(id);
             }
         }
     }
