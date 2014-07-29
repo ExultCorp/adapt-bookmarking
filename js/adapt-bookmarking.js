@@ -49,7 +49,7 @@ define(function(require) {
         	initialize();
 
             var locationID = ScormWrapper.getLessonLocation();
-            
+                        
             if (locationID !== 'undefined' && locationID) {
                 model.set('_locationID', locationID);
                 new BookmarkingDialog({model: model});

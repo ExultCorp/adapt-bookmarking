@@ -36,7 +36,7 @@ define(function(require) {
         onYesClicked: function(event) {
             event.preventDefault();
 
-            Adapt.navigateToElement(this.model.get('_locationID'));
+            Adapt.navigateToElement("." + this.model.get('_locationID'));
         },
 
         onNoClicked: function(event) {
