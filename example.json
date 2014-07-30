@@ -1,9 +1,17 @@
+// course.json
 "_bookmarking": {
     "_isEnabled": true,
+    "_level": "page" | "block" | "component",
     "title": "Bookmarking",
     "message": "Whould you like to continue where you left off?",
     "_buttons": {
         "yes": "Yes",
         "no": "No"
     }
+}
+
+// contentObjects.json - will override course.json for each contentObject, if set
+"_bookmarking": {
+    "_isEnabled": true,
+    "_level": "page" | "block" | "component"
 }

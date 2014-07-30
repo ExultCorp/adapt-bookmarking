@@ -6,22 +6,44 @@
 
 define(function(require) {
 
-	var Adapt = require('coreJS/adapt');
-	var Backbone = require('backbone');
-	var BookmarkingDialog = require('extensions/adapt-bookmarking/js/adapt-bookmarking-dialog');
+    var Adapt = require('coreJS/adapt');
+    var Backbone = require('backbone');
+    var BookmarkingDialog = require('extensions/adapt-bookmarking/js/adapt-bookmarking-dialog');
     var ScormWrapper = require('extensions/adapt-contrib-spoor/js/scormWrapper').getInstance();
+    var courseBookmarkModel;
+    var bookmarkLevel;
 
     function initialize() {
-    	Adapt.on('menuView:ready', resetLocationID);
-        Adapt.on('pageView:ready', addInViewListeners);
+        Adapt.on('menuView:ready', resetLocationID);
+        Adapt.on('pageView:preRender', setupBookmarkLevel);       
     }
 
-    function addInViewListeners(pageView) {
-        var blockViews = pageView.$('.block');
+    function setupBookmarkLevel(pageView) {
+        var hasPageBookmarkObject = pageView.model.has('_bookmarking');
+        var bookmarkModel = (hasPageBookmarkObject) ? new Backbone.Model(pageView.model.get('_bookmarking')) : courseBookmarkModel;
+        bookmarkLevel = bookmarkModel.get('_level');
 
-        blockViews.each(function (i) {
-        	$(this).on('inview', blockInview);            	
-        });
+        if (!bookmarkModel.get('_isEnabled')) {
+            resetLocationID();
+        } else {
+            if (bookmarkLevel === 'page') {
+                setLocationID(pageView.model.get('_id'));
+            } else {
+                Adapt.on(bookmarkLevel + 'View:postRender', addInViewListeners);
+                Adapt.on('remove', removeInViewListeners);
+            }
+        }
+    }
+
+    function addInViewListeners(view) {
+        var element = view.$el;
+        element.data('locationID', view.model.get('_id'));
+        element.on('inview', inview);
+    }
+
+    function removeInViewListeners() {
+        Adapt.off('remove', removeInViewListeners);
+        Adapt.off(bookmarkLevel + 'View:postRender', addInViewListeners);
     }
 
     function resetLocationID() {
@@ -32,28 +54,27 @@ define(function(require) {
         ScormWrapper.setLessonLocation(id);
     }
 
-    function blockInview(event, visible, visiblePartX, visiblePartY) {
+    function inview(event, visible, visiblePartX, visiblePartY) {
         if (visible) {
             if (visiblePartY === 'top') {
-            	var className = event.currentTarget.className;
-            	var id = $.trim(className.substring(className.indexOf(" "), className.lastIndexOf(' ')));
-            	setLocationID(id);
+                var id = $(this).data('locationID');
+                setLocationID(id);
             }
         }
     }
 
-	Adapt.once('adapt:initialize', function() {
-        var model = new Backbone.Model(Adapt.course.get('_bookmarking'));
+    Adapt.once('adapt:initialize', function() {
+        courseBookmarkModel = new Backbone.Model(Adapt.course.get('_bookmarking'));
 
-        if (model.get('_isEnabled')) {
-        	initialize();
+        if (courseBookmarkModel.get('_isEnabled')) {
+            initialize();
 
             var locationID = ScormWrapper.getLessonLocation();
                         
             if (locationID !== 'undefined' && locationID) {
-                model.set('_locationID', locationID);
-                new BookmarkingDialog({model: model});
+                courseBookmarkModel.set('_locationID', locationID);
+                new BookmarkingDialog({model: courseBookmarkModel});
             }
         }
-	});
+    });
 });
