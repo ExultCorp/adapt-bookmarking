@@ -70,8 +70,9 @@ define(function(require) {
             initialize();
 
             var locationID = ScormWrapper.getLessonLocation();
-                        
-            if (locationID !== 'undefined' && locationID) {
+
+                  
+            if (locationID && locationID !== "") {
                 courseBookmarkModel.set('_locationID', locationID);
                 new BookmarkingDialog({model: courseBookmarkModel});
             }

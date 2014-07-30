@@ -10,7 +10,7 @@
     }
 }
 
-// contentObjects.json - will override course.json for each contentObject, if set
+// contentObjects.json - will override course.json for each contentObject - _type "page" only, if set. Set _isEnabled false if no bookmarking on page
 "_bookmarking": {
     "_isEnabled": true,
     "_level": "page" | "block" | "component"
