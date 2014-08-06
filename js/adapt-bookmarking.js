@@ -70,8 +70,10 @@ define(function(require) {
             initialize();
 
             var locationID = ScormWrapper.getLessonLocation();
-               
-            if (locationID && locationID !== "") {
+            // currently a version running from main.html will still think it is connected to an LMS but return 'undefined' values - don't show the dialog if true
+            var usingOfflineAPI = locationID === 'undefined';
+
+            if (locationID && !usingOfflineAPI) {
                 courseBookmarkModel.set('_locationID', locationID);
                 new BookmarkingDialog({model: courseBookmarkModel});
             }
