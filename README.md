@@ -28,7 +28,7 @@ A description of the attributes is as follows:
 | message  | String   | The message to explain the dialog options
 | _buttons    | Object   | The labels for the button options
 
-The default values for whether bookmarking is on/off and the level of bookmarking can be overriden for each contentObject of "_type": "page". For example:
+The default values for whether bookmarking is on/off and the level of bookmarking can be overriden for each contentObject of "_type": "page" within the `contentObjects.json` file . For example:
 
     "_bookmarking": {
       "_isEnabled": false,
