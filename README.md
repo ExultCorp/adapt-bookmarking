@@ -1,7 +1,7 @@
 adapt-bookmarking
 ===============
 
-Allows returning users to be either taken to the menu or their last location.
+Allows returning users to be either taken to the menu or their last location when returning to the learning in a new session.
 
 ## Configuration
 
@@ -26,7 +26,7 @@ A description of the attributes is as follows:
 | _level  | String   | The type of view to return a user to. The possible values are "page", "block" or "component". The "_id" of the most recent view to trigger 'inview' will be used
 | title  | String   | The title to appear on the dialog
 | message  | String   | The message to explain the dialog options
-| _buttons    | Object   | The labels for the buttons
+| _buttons    | Object   | The labels for the button options
 
 The default values for whether bookmarking is on/off and the level of bookmarking can be overriden for each contentObject of "_type": "page". For example:
 
