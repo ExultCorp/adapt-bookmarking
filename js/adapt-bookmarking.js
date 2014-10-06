@@ -1,5 +1,6 @@
 /*
 * adapt-bookmarking
+* Dependencies: adapt-contrib-spoor
 * License - https://github.com/cgkineo/adapt-bookmarking/LICENSE
 * Maintainers - Dan Ghost <daniel.ghost@kineo.com>
 */
