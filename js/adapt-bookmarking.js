@@ -51,13 +51,15 @@ define(function(require) {
     }
 
     function setLocationID(id) {
+        courseBookmarkModel.set('_locationID', id);
         ScormWrapper.setLessonLocation(id);
     }
 
     function inview(event, visible, visiblePartX, visiblePartY) {
-        if (visible) {
-            if (visiblePartY === 'top') {
-                var id = $(this).data('locationID');
+        if (visible && (visiblePartY === 'top' || visiblePartY === 'both')) {
+            var id = $(this).data('locationID');
+
+            if (courseBookmarkModel.get('_locationID') !== id) {
                 setLocationID(id);
             }
         }
